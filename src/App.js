@@ -26,6 +26,7 @@ const App = () => {
 
 		try {
 			const user = await loginService.login({ username, password })
+			blogService.setToken(user.token)
 			window.localStorage.setItem('loggedInUser', JSON.stringify(user))
 			setUser(user)
 			setUsername('')
@@ -35,10 +36,23 @@ const App = () => {
 		}
 	}
 
-	const handleLogout = async (e) => {
+	const handleLogout = (e) => {
 		e.preventDefault()
 		window.localStorage.removeItem('loggedInUser')
 		setUser(null)
+	}
+
+	const addBlog = async (e) => {
+		e.preventDefault()
+		let blog = {
+			title: e.target.title.value,
+			author: e.target.author.value,
+			url: e.target.url.value,
+		}
+
+		blogService.setToken(user.token)
+		const returnedBlog = await blogService.create(blog)
+		setBlogs(blogs.concat(returnedBlog))
 	}
 
 	if (user === null) {
@@ -77,6 +91,18 @@ const App = () => {
 				{user.username} logged in{' '}
 				<button onClick={handleLogout}>logout</button>
 			</p>
+			<div>
+				<h2>create new</h2>
+				<form onSubmit={addBlog}>
+					title <input type='text' name='title' />
+					<br />
+					author <input type='text' name='author' />
+					<br />
+					url <input type='text' name='url' />
+					<br />
+					<button type='submit'>create</button>
+				</form>
+			</div>
 			{blogs.map((blog) => (
 				<Blog key={blog.id} blog={blog} />
 			))}
