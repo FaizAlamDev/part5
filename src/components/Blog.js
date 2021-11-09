@@ -18,7 +18,6 @@ const Blog = ({ blog, handleLikes }) => {
 	if (view === true) {
 		return (
 			<div style={blogStyle}>
-				{console.log(blog)}
 				<div>
 					{blog.title} - {blog.author}
 					<button onClick={handleClick}>hide</button>
