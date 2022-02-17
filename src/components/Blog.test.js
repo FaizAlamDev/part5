@@ -34,3 +34,25 @@ test('clicking the button shows url and no. of likes', () => {
 	expect(urlDiv).toHaveTextContent('localhost:3000')
 	expect(likesDiv).toHaveTextContent('likes 100')
 })
+
+test('if like button pressed twice, event handler is called twice', () => {
+	const blog = {
+		title: 'Jest',
+		author: 'Faiz',
+		url: 'localhost:3000',
+		likes: 100,
+	}
+
+	const mockHandler = jest.fn()
+
+	render(<Blog blog={blog} handleLikes={mockHandler} />)
+
+	const buttonView = screen.getByText('view')
+	userEvent.click(buttonView)
+
+	const buttonLike = screen.getByText('like')
+	userEvent.click(buttonLike)
+	userEvent.click(buttonLike)
+
+	expect(mockHandler.mock.calls).toHaveLength(2)
+})
