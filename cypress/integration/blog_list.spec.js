@@ -81,6 +81,63 @@ describe('Blog app', function () {
 					cy.contains('likes 1')
 				})
 			})
+
+			describe('when multiple blogs exist', function () {
+				// create 3 blogs
+				beforeEach(function () {
+					cy.createBlog({
+						title: 'One',
+						author: 'Faiz',
+						url: 'one.com',
+					})
+					cy.createBlog({
+						title: 'Two',
+						author: 'Faiz',
+						url: 'two.com',
+					})
+					cy.createBlog({
+						title: 'Three',
+						author: 'Faiz',
+						url: 'three.com',
+					})
+				})
+
+				it('they are ordered according to likes', function () {
+					// like blog One 7 times
+					cy.contains('One - Faiz').parent().find('#viewBtn').click()
+					for (let i = 0; i < 7; i++) {
+						cy.contains('like').click()
+					}
+					cy.contains('hide').click()
+
+					// like blog Two 10 times
+					cy.contains('Two - Faiz').parent().find('#viewBtn').click()
+					for (let i = 0; i < 10; i++) {
+						cy.contains('like').click()
+					}
+					cy.contains('hide').click()
+
+					// like blog Three 3 times
+					cy.contains('Three - Faiz')
+						.parent()
+						.find('#viewBtn')
+						.click()
+					for (let i = 0; i < 3; i++) {
+						cy.contains('like').click()
+					}
+					cy.contains('hide').click()
+
+					// checking order according to likes
+					// Blog Two should be first
+					// Blog One should be second
+					// Blog Three should be third
+					cy.get('.blog').then(($div) => {
+						cy.get($div[0]).should('contain', 'Two - Faiz')
+						cy.get($div[1]).should('contain', 'One - Faiz')
+						cy.get($div[2]).should('contain', 'Three - Faiz')
+					})
+				})
+			})
 		})
 	})
 })
