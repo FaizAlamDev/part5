@@ -36,5 +36,29 @@ describe('Blog app', function () {
 				.should('contain', 'wrong username or password')
 				.and('have.css', 'color', 'rgb(255, 0, 0)')
 		})
+
+		describe('when logged in', function () {
+			beforeEach(function () {
+				// login
+				cy.get('#username').type('faizalam')
+				cy.get('#password').type('alamalam')
+				cy.get('#loginBtn').click()
+
+				cy.contains('faizalam logged in')
+			})
+
+			it('A blog can be created', function () {
+				cy.contains('create new blog').click()
+				cy.contains('create new')
+
+				cy.get('#title').type('Jest')
+				cy.get('#author').type('Faiz')
+				cy.get('#url').type('localhost:3000')
+
+				cy.get('#createBtn').click()
+
+				cy.contains('Jest - Faiz')
+			})
+		})
 	})
 })
