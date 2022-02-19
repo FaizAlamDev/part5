@@ -59,6 +59,28 @@ describe('Blog app', function () {
 
 				cy.contains('Jest - Faiz')
 			})
+
+			describe('when a blog exists', function () {
+				beforeEach(function () {
+					// create blog
+					cy.contains('create new blog').click()
+					cy.contains('create new')
+
+					cy.get('#title').type('Jest')
+					cy.get('#author').type('Faiz')
+					cy.get('#url').type('localhost:3000')
+
+					cy.get('#createBtn').click()
+
+					cy.contains('Jest - Faiz')
+				})
+
+				it('we can like it', function () {
+					cy.get('#viewBtn').click()
+					cy.get('#likeBtn').click()
+					cy.contains('likes 1')
+				})
+			})
 		})
 	})
 })

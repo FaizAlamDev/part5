@@ -25,7 +25,9 @@ const Blog = ({ blog, handleLikes }) => {
 				<div id='url'>{blog.url}</div>
 				<div id='likes'>
 					likes {blog.likes}{' '}
-					<button onClick={handleLikes}>like</button>
+					<button id='likeBtn' onClick={handleLikes}>
+						like
+					</button>
 				</div>
 				<div>{blog.author}</div>
 			</div>
@@ -36,7 +38,9 @@ const Blog = ({ blog, handleLikes }) => {
 		<div style={blogStyle} className='blog'>
 			<div>
 				{blog.title} - {blog.author}{' '}
-				<button onClick={handleClick}>view</button>
+				<button id='viewBtn' onClick={handleClick}>
+					view
+				</button>
 			</div>
 		</div>
 	)
