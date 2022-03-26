@@ -83,7 +83,7 @@ describe('Blog app', function () {
 			})
 
 			describe('when multiple blogs exist', function () {
-				// create 3 blogs
+				// create 4 blogs
 				beforeEach(function () {
 					cy.createBlog({
 						title: 'One',
@@ -100,6 +100,39 @@ describe('Blog app', function () {
 						author: 'Faiz',
 						url: 'three.com',
 					})
+				})
+
+				it('logged in user can remove it', function () {
+					cy.contains('Three - Faiz')
+						.parent()
+						.find('#viewBtn')
+						.click()
+					cy.contains('remove').click()
+					cy.contains('Three - Faiz').should('not.exist')
+				})
+
+				it('other user cannot delete blog', function () {
+					// making user moizalam
+					const user1 = {
+						name: 'Moiz Alam',
+						username: 'moizalam',
+						password: 'alamalam',
+					}
+					cy.request('POST', 'http://localhost:3003/api/users', user1)
+					// logging out Faiz
+					cy.contains('logout').click()
+					// logging in Moiz
+					cy.get('#username').type('moizalam')
+					cy.get('#password').type('alamalam')
+					cy.get('#loginBtn').click()
+
+					cy.contains('moizalam logged in')
+
+					cy.contains('Three - Faiz')
+						.parent()
+						.find('#viewBtn')
+						.click()
+					cy.contains('remove').should('not.exist')
 				})
 
 				it('they are ordered according to likes', function () {
