@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, handleLikes }) => {
+const Blog = ({ blog, user, handleLikes, handleRemove }) => {
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
@@ -10,7 +10,7 @@ const Blog = ({ blog, handleLikes }) => {
 
 	const [view, setView] = useState(false)
 
-	const handleClick = (e) => {
+	const handleVisibility = (e) => {
 		e.preventDefault()
 		setView(!view)
 	}
@@ -20,7 +20,7 @@ const Blog = ({ blog, handleLikes }) => {
 			<div style={blogStyle} className='blog'>
 				<div>
 					{blog.title} - {blog.author}
-					<button onClick={handleClick}>hide</button>
+					<button onClick={handleVisibility}>hide</button>
 				</div>
 				<div id='url'>{blog.url}</div>
 				<div id='likes'>
@@ -30,6 +30,9 @@ const Blog = ({ blog, handleLikes }) => {
 					</button>
 				</div>
 				<div>{blog.author}</div>
+				{blog.user.name === user.name ? (
+					<button onClick={handleRemove}>remove</button>
+				) : null}
 			</div>
 		)
 	}
@@ -38,7 +41,7 @@ const Blog = ({ blog, handleLikes }) => {
 		<div style={blogStyle} className='blog'>
 			<div>
 				{blog.title} - {blog.author}{' '}
-				<button id='viewBtn' onClick={handleClick}>
+				<button id='viewBtn' onClick={handleVisibility}>
 					view
 				</button>
 			</div>

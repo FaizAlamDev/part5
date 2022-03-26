@@ -63,7 +63,7 @@ const App = () => {
 		BlogFormRef.current.toggleVisibility()
 		blogService.setToken(user.token)
 		const returnedBlog = await blogService.create(blogObject)
-		setBlogs(blogs.concat(returnedBlog))
+		setBlogs(blogs.concat({ ...returnedBlog, user }))
 		setMsg(
 			`a new blog '${returnedBlog.title}' by ${returnedBlog.author} added`
 		)
@@ -77,6 +77,15 @@ const App = () => {
 		const changedBlog = { ...blog, likes: (blog.likes += 1) }
 		const returnedBlog = await blogService.update(id, changedBlog)
 		setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
+	}
+
+	const deleteBlog = async (id) => {
+		const blog = blogs.find((n) => n.id === id)
+		if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
+			blogService.setToken(user.token)
+			await blogService.remove(id)
+			setBlogs(blogs.filter((blog) => blog.id !== id))
+		}
 	}
 
 	if (user === null) {
@@ -130,7 +139,9 @@ const App = () => {
 					<Blog
 						key={blog.id}
 						blog={blog}
+						user={user}
 						handleLikes={() => incrementLikes(blog.id)}
+						handleRemove={() => deleteBlog(blog.id)}
 					/>
 				))}
 		</div>
